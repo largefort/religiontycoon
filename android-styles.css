@@ -1,0 +1,707 @@
+:root {
+    --primary-gold: #ffd700;
+    --secondary-gold: #b8860b;
+    --divine-white: #ffffff;
+    --sacred-black: #1a1a1a;
+    --energy-glow: #00d4ff;
+    --temple-stone: #8b7355;
+    --follower-blue: #4a90e2;
+    --miracle-purple: #9b59b6;
+    --bottom-nav-height: 80px;
+    --header-height: 100px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
+    font-family: 'Cal Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: var(--divine-white);
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    touch-action: manipulation;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+    border: 2px solid var(--primary-gold);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.creation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-group {
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-gold);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--secondary-gold);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--divine-white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.divine-button {
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+    border: none;
+    border-radius: 12px;
+    color: var(--sacred-black);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1rem;
+    touch-action: manipulation;
+}
+
+.divine-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Game Interface */
+.hidden {
+    display: none !important;
+}
+
+#game-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.game-header {
+    height: var(--header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid var(--primary-gold);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.religion-info h1 {
+    font-size: 1.2rem;
+    color: var(--primary-gold);
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+}
+
+.god-title {
+    font-family: 'Space Mono', monospace;
+    opacity: 0.8;
+    font-size: 0.7rem;
+}
+
+.divine-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.stat-value {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--primary-gold);
+    font-family: 'Space Mono', monospace;
+}
+
+/* Main Content */
+.game-main {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
+}
+
+.tab-content {
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Divine Tab */
+.divine-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+    overflow: hidden;
+    padding: 2rem 1rem;
+}
+
+.divine-display video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+.energy-orb {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+    margin-bottom: 2rem;
+    touch-action: manipulation;
+}
+
+.energy-orb:active {
+    transform: scale(0.95);
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8));
+}
+
+.orb-glow {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, rgba(255, 215, 0, 0.3) 30%, transparent 70%);
+    animation: orbPulse 3s ease-in-out infinite alternate, orbRotate 8s linear infinite;
+    opacity: 0.8;
+}
+
+.orb-core {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    border-radius: 50%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
+        linear-gradient(45deg, var(--energy-glow), var(--primary-gold), #00aaff);
+    box-shadow: 
+        inset 0 0 30px rgba(255, 255, 255, 0.4),
+        inset 0 0 15px rgba(0, 212, 255, 0.6),
+        0 0 20px rgba(0, 212, 255, 0.3);
+    animation: coreShimmer 2s ease-in-out infinite alternate;
+    overflow: hidden;
+}
+
+.orb-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--sacred-black);
+    font-family: 'Space Mono', monospace;
+    text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.8),
+        0 0 15px rgba(0, 212, 255, 0.6);
+    animation: textGlow 2s ease-in-out infinite alternate;
+    z-index: 10;
+}
+
+.divine-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+    border: none;
+    border-radius: 15px;
+    color: var(--sacred-black);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    min-height: 56px;
+}
+
+.action-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Actions Tab */
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+    position: relative;
+}
+
+.actions-grid::before {
+    content: '';
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+    pointer-events: none;
+}
+
+#tab-actions {
+    position: relative;
+    overflow: hidden;
+}
+
+#tab-actions video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.4;
+}
+
+.grid-action-button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    color: var(--divine-white);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 70px;
+    touch-action: manipulation;
+}
+
+.grid-action-button:not(.disabled):active {
+    transform: scale(0.98);
+    border-color: var(--primary-gold);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.grid-action-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.grid-action-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.grid-action-text {
+    flex: 1;
+}
+
+.grid-action-text strong {
+    display: block;
+    color: var(--primary-gold);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.grid-action-text small {
+    color: var(--secondary-gold);
+    font-size: 0.8rem;
+}
+
+/* Upgrades Tab */
+.upgrades-list {
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+}
+
+.upgrades-list::before {
+    content: '';
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+    pointer-events: none;
+}
+
+#tab-upgrades {
+    position: relative;
+    overflow: hidden;
+}
+
+#tab-upgrades video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.4;
+}
+
+.upgrade-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    min-height: 80px;
+}
+
+.upgrade-card:not([style*="opacity"]) {
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.upgrade-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.upgrade-info {
+    flex: 1;
+}
+
+.upgrade-info h4 {
+    color: var(--primary-gold);
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.upgrade-info p {
+    opacity: 0.8;
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.upgrade-cost {
+    font-family: 'Space Mono', monospace;
+    color: var(--secondary-gold);
+    font-size: 0.7rem;
+}
+
+.upgrade-btn {
+    padding: 0.75rem 1rem;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+    border: none;
+    border-radius: 10px;
+    color: var(--sacred-black);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+    min-width: 80px;
+    touch-action: manipulation;
+}
+
+.upgrade-btn:not(.disabled):active {
+    transform: scale(0.98);
+}
+
+.upgrade-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    height: var(--bottom-nav-height);
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 2px solid var(--primary-gold);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+}
+
+.nav-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    touch-action: manipulation;
+}
+
+.nav-tab.active {
+    color: var(--primary-gold);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.nav-tab:active {
+    transform: scale(0.95);
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+}
+
+.nav-tab.active .nav-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.nav-tab span {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Animations */
+@keyframes orbPulse {
+    0% { 
+        transform: scale(1); 
+        opacity: 0.6; 
+    }
+    100% { 
+        transform: scale(1.1); 
+        opacity: 1; 
+    }
+}
+
+@keyframes orbRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes coreShimmer {
+    0% {
+        box-shadow: 
+            inset 0 0 30px rgba(255, 255, 255, 0.4),
+            inset 0 0 15px rgba(0, 212, 255, 0.6),
+            0 0 20px rgba(0, 212, 255, 0.3);
+    }
+    100% {
+        box-shadow: 
+            inset 0 0 40px rgba(255, 255, 255, 0.6),
+            inset 0 0 25px rgba(0, 212, 255, 0.8),
+            0 0 30px rgba(0, 212, 255, 0.6);
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow: 
+            0 0 8px rgba(255, 255, 255, 0.8),
+            0 0 15px rgba(0, 212, 255, 0.6);
+    }
+    100% {
+        text-shadow: 
+            0 0 12px rgba(255, 255, 255, 1),
+            0 0 20px rgba(0, 212, 255, 0.9),
+            0 0 25px rgba(255, 215, 0, 0.7);
+    }
+}
+
+/* Click Effect */
+@keyframes click-effect {
+    0% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); 
+    }
+    25% { 
+        transform: scale(1.1); 
+        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1)); 
+    }
+    50% { 
+        transform: scale(1.05); 
+        filter: drop-shadow(0 0 50px rgba(0, 212, 255, 1)); 
+    }
+    100% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); 
+    }
+}
+
+.click-effect {
+    animation: click-effect 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Energy Particles */
+.energy-particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 1000;
+}
+
+/* Safe Area Support for notched devices */
+@supports (padding: max(0px)) {
+    .game-header {
+        padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    
+    .bottom-nav {
+        padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    }
+}
+
+/* Landscape Mode Adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+    .energy-orb {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .orb-text {
+        font-size: 1.4rem;
+    }
+    
+    .divine-display {
+        padding: 1rem;
+    }
+    
+    .game-header {
+        padding: 0.5rem 1rem;
+    }
+    
+    .religion-info h1 {
+        font-size: 1rem;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+    .energy-orb {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .orb-text {
+        font-size: 1.4rem;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Religion Tycoon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="android-styles.css">
+    <meta name="theme-color" content="#ffd700">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Religion Creation Modal -->
+        <div id="creation-modal" class="modal">
+            <div class="modal-content">
+                <h2>Create Your Divine Empire</h2>
+                <div class="creation-form">
+                    <div class="input-group">
+                        <label for="religion-name">Religion Name</label>
+                        <input type="text" id="religion-name" placeholder="The Church of..." maxlength="30">
+                    </div>
+                    <div class="input-group">
+                        <label for="god-name">Your Divine Name</label>
+                        <input type="text" id="god-name" placeholder="The Supreme..." maxlength="25">
+                    </div>
+                    <button id="create-religion" class="divine-button">Begin Divine Rule</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Interface -->
+        <div id="game-interface" class="hidden">
+            <!-- Top Header -->
+            <header class="game-header">
+                <div class="religion-info">
+                    <h1 id="religion-title">The Church of Light</h1>
+                    <p class="god-title">Supreme deity: <span id="god-title">The Almighty One</span></p>
+                </div>
+                <div class="divine-stats">
+                    <div class="stat-item">
+                        <img src="miracle-icon.png" class="stat-icon" alt="Divine Energy">
+                        <span class="stat-value" id="divine-energy">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <img src="follower-icon.png" class="stat-icon" alt="Followers">
+                        <span class="stat-value" id="followers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <img src="temple-icon.png" class="stat-icon" alt="Temples">
+                        <span class="stat-value" id="temples">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="game-main">
+                <!-- Tab Content -->
+                <div id="tab-divine" class="tab-content active">
+                    <div class="divine-display">
+                        <video autoplay muted loop playsinline>
+                            <source src="energy-orb-bg.mp4" type="video/mp4">
+                        </video>
+                        <div class="energy-orb" id="energy-orb">
+                            <div class="orb-glow"></div>
+                            <div class="orb-core"></div>
+                            <span class="orb-text" id="orb-energy">0</span>
+                        </div>
+                        <div class="divine-actions">
+                            <button id="create-miracle" class="action-button miracle-btn">
+                                <img src="miracle-icon.png" class="action-icon" alt="Miracle">
+                                <span>Perform Miracle</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-actions" class="tab-content">
+                    <video autoplay muted loop playsinline>
+                        <source src="energy-orb-bg.mp4" type="video/mp4">
+                    </video>
+                    <div class="actions-grid">
+                        <button id="inspire-follower" class="grid-action-button disabled">
+                            <img src="follower-icon.png" class="grid-action-icon" alt="Inspire">
+                            <div class="grid-action-text">
+                                <strong>Inspire Follower</strong>
+                                <small>Cost: 10 Energy</small>
+                            </div>
+                        </button>
+                        <button id="build-temple" class="grid-action-button disabled">
+                            <img src="temple-icon.png" class="grid-action-icon" alt="Temple">
+                            <div class="grid-action-text">
+                                <strong>Build Temple</strong>
+                                <small>Cost: 50 Energy</small>
+                            </div>
+                        </button>
+                        <button id="divine-vision" class="grid-action-button disabled">
+                            <img src="divine-blessing-icon.png" class="grid-action-icon" alt="Vision">
+                            <div class="grid-action-text">
+                                <strong>Divine Vision</strong>
+                                <small>Cost: 75 Energy</small>
+                            </div>
+                        </button>
+                        <button id="holy-crusade" class="grid-action-button disabled">
+                            <img src="prophet-icon.png" class="grid-action-icon" alt="Crusade">
+                            <div class="grid-action-text">
+                                <strong>Holy Crusade</strong>
+                                <small>Cost: 150 Energy</small>
+                            </div>
+                        </button>
+                        <button id="celestial-storm" class="grid-action-button disabled">
+                            <img src="sanctuary-icon.png" class="grid-action-icon" alt="Storm">
+                            <div class="grid-action-text">
+                                <strong>Celestial Storm</strong>
+                                <small>Cost: 300 Energy</small>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="tab-upgrades" class="tab-content">
+                    <video autoplay muted loop playsinline>
+                        <source src="energy-orb-bg.mp4" type="video/mp4">
+                    </video>
+                    <div class="upgrades-list">
+                        <div class="upgrade-card" id="upgrade-blessing">
+                            <img src="divine-blessing-icon.png" class="upgrade-icon" alt="Blessing">
+                            <div class="upgrade-info">
+                                <h4>Divine Blessing</h4>
+                                <p>Doubles miracle power</p>
+                                <span class="upgrade-cost">Cost: 25 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                        <div class="upgrade-card" id="upgrade-prophet">
+                            <img src="prophet-icon.png" class="upgrade-icon" alt="Prophet">
+                            <div class="upgrade-info">
+                                <h4>Send Prophet</h4>
+                                <p>Auto-generates followers</p>
+                                <span class="upgrade-cost">Cost: 100 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                        <div class="upgrade-card" id="upgrade-sanctuary">
+                            <img src="sanctuary-icon.png" class="upgrade-icon" alt="Sanctuary">
+                            <div class="upgrade-info">
+                                <h4>Grand Sanctuary</h4>
+                                <p>Temples generate more energy</p>
+                                <span class="upgrade-cost">Cost: 250 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                        <div class="upgrade-card" id="upgrade-omnipresence">
+                            <img src="divine-blessing-icon.png" class="upgrade-icon" alt="Omnipresence">
+                            <div class="upgrade-info">
+                                <h4>Divine Omnipresence</h4>
+                                <p>All actions generate bonus energy</p>
+                                <span class="upgrade-cost">Cost: 500 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                        <div class="upgrade-card" id="upgrade-scriptures">
+                            <img src="miracle-icon.png" class="upgrade-icon" alt="Scriptures">
+                            <div class="upgrade-info">
+                                <h4>Sacred Scriptures</h4>
+                                <p>Followers generate passive energy</p>
+                                <span class="upgrade-cost">Cost: 750 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                        <div class="upgrade-card" id="upgrade-flame">
+                            <img src="miracle-icon.png" class="upgrade-icon" alt="Flame">
+                            <div class="upgrade-info">
+                                <h4>Eternal Flame</h4>
+                                <p>Miracles spread divine influence</p>
+                                <span class="upgrade-cost">Cost: 1000 Energy</span>
+                            </div>
+                            <button class="upgrade-btn disabled">Purchase</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <button class="nav-tab active" data-tab="divine">
+                    <img src="miracle-icon.png" class="nav-icon" alt="Divine">
+                    <span>Divine</span>
+                </button>
+                <button class="nav-tab" data-tab="actions">
+                    <img src="follower-icon.png" class="nav-icon" alt="Actions">
+                    <span>Actions</span>
+                </button>
+                <button class="nav-tab" data-tab="upgrades">
+                    <img src="temple-icon.png" class="nav-icon" alt="Upgrades">
+                    <span>Upgrades</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Mobile-specific enhancements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle tab navigation
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    
+                    // Remove active class from all tabs and contents
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(`tab-${targetTab}`).classList.add('active');
+                });
+            });
+
+            // Prevent zoom on double tap
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (event) => {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            // Haptic feedback for button taps (if supported)
+            const addHapticFeedback = (element) => {
+                element.addEventListener('touchstart', () => {
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                });
+            };
+
+            // Add haptic feedback to main buttons
+            document.querySelectorAll('.action-button, .grid-action-button, .upgrade-btn, .divine-button').forEach(addHapticFeedback);
+            addHapticFeedback(document.getElementById('energy-orb'));
+        });
+    </script>
+</body>
+</html>
