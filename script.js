@@ -72,9 +72,60 @@ class ReligionTycoon {
     }
     
     init() {
+        this.loadGame();
         this.bindEvents();
         this.startGameLoop();
-        this.showCreationModal();
+        
+        // Show creation modal only if no saved game exists
+        if (!this.gameState.religionName || !this.gameState.godName) {
+            this.showCreationModal();
+        } else {
+            // If we have a saved game, show the game interface directly
+            document.getElementById('religion-title').textContent = this.gameState.religionName;
+            document.getElementById('god-title').textContent = this.gameState.godName;
+            document.getElementById('creation-modal').style.display = 'none';
+            document.getElementById('game-interface').classList.remove('hidden');
+            this.sounds.ambient.play().catch(e => console.log('Audio autoplay prevented'));
+            this.updateUI();
+        }
+    }
+    
+    saveGame() {
+        try {
+            localStorage.setItem('religionTycoonSave', JSON.stringify(this.gameState));
+        } catch (error) {
+            console.log('Failed to save game:', error);
+        }
+    }
+    
+    loadGame() {
+        try {
+            const savedGame = localStorage.getItem('religionTycoonSave');
+            if (savedGame) {
+                const loadedState = JSON.parse(savedGame);
+                // Merge saved state with default state to handle new properties
+                this.gameState = { ...this.gameState, ...loadedState };
+                
+                // Ensure all nested objects are properly merged
+                if (loadedState.upgrades) {
+                    this.gameState.upgrades = { ...this.gameState.upgrades, ...loadedState.upgrades };
+                }
+                if (loadedState.autoGenerators) {
+                    this.gameState.autoGenerators = { ...this.gameState.autoGenerators, ...loadedState.autoGenerators };
+                }
+                
+                console.log('Game loaded successfully');
+            }
+        } catch (error) {
+            console.log('Failed to load game:', error);
+        }
+    }
+    
+    resetGame() {
+        if (confirm('Are you sure you want to reset your divine empire? This cannot be undone!')) {
+            localStorage.removeItem('religionTycoonSave');
+            location.reload();
+        }
     }
     
     bindEvents() {
@@ -191,6 +242,9 @@ class ReligionTycoon {
         this.gameState.religionName = religionName;
         this.gameState.godName = godName;
         
+        // Save the game after creating religion
+        this.saveGame();
+        
         // Update UI
         document.getElementById('religion-title').textContent = religionName;
         document.getElementById('god-title').textContent = godName;
@@ -220,6 +274,9 @@ class ReligionTycoon {
         }
         
         this.gameState.divineEnergy += energyGain;
+        
+        // Save game after state change
+        this.saveGame();
         
         // Enhanced click effect with particles
         const orb = document.getElementById('energy-orb');
@@ -301,6 +358,9 @@ class ReligionTycoon {
             this.gameState.followers += 1;
             this.costs.follower = Math.floor(this.costs.follower * 1.2);
             
+            // Save game after state change
+            this.saveGame();
+            
             // Play follower sound
             this.playSound('follower');
             
@@ -316,6 +376,9 @@ class ReligionTycoon {
             this.gameState.divineEnergy -= this.costs.temple;
             this.gameState.temples += 1;
             this.costs.temple = Math.floor(this.costs.temple * 1.5);
+            
+            // Save game after state change
+            this.saveGame();
             
             // Play temple sound
             this.playSound('temple');
@@ -336,6 +399,9 @@ class ReligionTycoon {
             this.gameState.divineEnergy += bonus;
             this.costs.divineVision = Math.floor(this.costs.divineVision * 1.3);
             
+            // Save game after state change
+            this.saveGame();
+            
             this.playSound('miracle');
             this.showMessage('divine', `Your divine vision reveals hidden truths! Gained ${bonus} bonus energy!`);
             this.updateUI();
@@ -350,6 +416,9 @@ class ReligionTycoon {
             const newFollowers = Math.floor(this.gameState.temples * 2) + 10;
             this.gameState.followers += newFollowers;
             this.costs.holyCrusade = Math.floor(this.costs.holyCrusade * 1.4);
+            
+            // Save game after state change
+            this.saveGame();
             
             this.playSound('follower');
             this.showMessage('follower', `Your holy crusade converts ${newFollowers} souls to your cause!`);
@@ -371,6 +440,9 @@ class ReligionTycoon {
             this.gameState.temples += templeBonus;
             this.costs.celestialStorm = Math.floor(this.costs.celestialStorm * 1.5);
             
+            // Save game after state change
+            this.saveGame();
+            
             this.playSound('temple');
             this.showMessage('divine', `Your celestial storm reshapes reality! Massive growth across all domains!`);
             this.updateUI();
@@ -383,8 +455,8 @@ class ReligionTycoon {
             this.gameState.divineEnergy -= cost;
             this.gameState.upgrades[upgradeType] = true;
             
-            // Play upgrade sound
-            this.playSound('upgrade');
+            // Save game after state change
+            this.saveGame();
             
             switch (upgradeType) {
                 case 'blessing':
@@ -508,21 +580,32 @@ class ReligionTycoon {
     
     startGameLoop() {
         setInterval(() => {
+            let stateChanged = false;
+            
             // Auto-generate followers from prophet
             if (this.gameState.autoGenerators.prophet) {
+                const oldFollowers = this.gameState.followers;
                 this.gameState.followers += Math.floor(this.gameState.followers * 0.01) + 1;
+                if (this.gameState.followers !== oldFollowers) stateChanged = true;
             }
             
             // Auto-generate energy from temples
             if (this.gameState.autoGenerators.sanctuary && this.gameState.temples > 0) {
                 const energyGain = this.gameState.temples * (this.gameState.autoGenerators.sanctuary ? 2 : 1);
                 this.gameState.divineEnergy += energyGain;
+                stateChanged = true;
             }
             
             // Auto-generate energy from followers with scriptures
             if (this.gameState.autoGenerators.scriptures && this.gameState.followers > 0) {
                 const energyGain = Math.floor(this.gameState.followers * 0.1) + 1;
                 this.gameState.divineEnergy += energyGain;
+                stateChanged = true;
+            }
+            
+            // Save game if state changed
+            if (stateChanged) {
+                this.saveGame();
             }
             
             this.updateUI();
