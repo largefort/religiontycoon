@@ -19,6 +19,7 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    touch-action: manipulation;
 }
 
 body {
@@ -29,6 +30,36 @@ body {
     overflow: hidden;
     position: fixed;
     width: 100%;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    /* Disable zoom completely */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+/* Disable zoom on all interactive elements */
+input, textarea, select, button {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Disable zoom on double tap for all elements */
+* {
+    -ms-touch-action: manipulation;
     touch-action: manipulation;
 }
 
