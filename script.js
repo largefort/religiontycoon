@@ -589,10 +589,17 @@ class ReligionTycoon {
                 if (this.gameState.followers !== oldFollowers) stateChanged = true;
             }
             
-            // Auto-generate energy from temples
+            // Auto-generate energy from temples (base generation)
+            if (this.gameState.temples > 0) {
+                const baseEnergyGain = this.gameState.temples;
+                this.gameState.divineEnergy += baseEnergyGain;
+                stateChanged = true;
+            }
+            
+            // Auto-generate energy from temples with sanctuary upgrade
             if (this.gameState.autoGenerators.sanctuary && this.gameState.temples > 0) {
-                const energyGain = this.gameState.temples * (this.gameState.autoGenerators.sanctuary ? 2 : 1);
-                this.gameState.divineEnergy += energyGain;
+                const bonusEnergyGain = this.gameState.temples * 2;
+                this.gameState.divineEnergy += bonusEnergyGain;
                 stateChanged = true;
             }
             
