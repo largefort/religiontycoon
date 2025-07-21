@@ -452,6 +452,37 @@ body {
     cursor: not-allowed;
 }
 
+.reset-section {
+    margin-top: 2rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.reset-button {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(45deg, #dc3545, #c82333);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.reset-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.reset-section small {
+    display: block;
+    opacity: 0.6;
+    font-size: 0.7rem;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .game-main {
